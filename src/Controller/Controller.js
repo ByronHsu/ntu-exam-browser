@@ -6,18 +6,9 @@ import {
   Switch,
 } from 'react-router-dom';
 import Category from '../Category/Category';
+import Department from '../Department/Department';
 import $ from 'jquery'; 
 
-const home = () => {
-    return (
-        <div>home</div>
-    )
-}
-const category = () => {
-    return (
-        <Category />
-    )
-}
 $(document).ready(function(){
   $(".nav-item.nav-link").click(function() {
       $(".nav-item.nav-link").removeClass('active');
@@ -27,7 +18,6 @@ $(document).ready(function(){
 const Controller = () => (
   <Router>
     <div className="container-fluid">
-
       <div className="container-fluid">
         <nav className="navbar navbar-toggleable-md navbar-light bg-faded">
           <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,8 +34,8 @@ const Controller = () => (
       </div>
 
       <Switch>
-        <Route exact path="/" component={home} />
-        <Route path="/category" component={category} />
+        <Route exact path="/" component={()=>(<div>home</div>)} />
+        <Route path="/category" component={()=>(<Category/>)} />
       </Switch>
     </div>
 
