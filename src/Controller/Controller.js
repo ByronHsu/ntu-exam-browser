@@ -5,15 +5,17 @@ import {
   Link,
   Switch,
 } from 'react-router-dom';
+import Category from '../Category/Category';
 import $ from 'jquery'; 
-const Home = () => {
+
+const home = () => {
     return (
         <div>home</div>
     )
 }
-const Category = () => {
+const category = () => {
     return (
-        <div>Category</div>
+        <Category />
     )
 }
 $(document).ready(function(){
@@ -24,24 +26,29 @@ $(document).ready(function(){
 );
 const Controller = () => (
   <Router>
-    <div>
-      <nav className="navbar navbar-toggleable-md navbar-light bg-faded">
-        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <a className="navbar-brand">Navbar</a>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <Link to="/"><a className="nav-item nav-link">Home</a></Link>
-            <Link to="/category"><a className="nav-item nav-link">Category</a></Link>
+    <div className="container-fluid">
+
+      <div className="container-fluid">
+        <nav className="navbar navbar-toggleable-md navbar-light bg-faded">
+          <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <a className="navbar-brand">Navbar</a>
+          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div className="navbar-nav">
+              <Link to="/"><a className="nav-item nav-link">Home</a></Link>
+              <Link to="/category"><a className="nav-item nav-link">Category</a></Link>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
+
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/category" component={Category} />
+        <Route exact path="/" component={home} />
+        <Route path="/category" component={category} />
       </Switch>
     </div>
+
   </Router>
 );
 export default Controller;
