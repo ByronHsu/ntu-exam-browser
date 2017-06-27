@@ -8,14 +8,29 @@ import {
 } from 'react-router-dom';
 import Course from '../Course/Course'
 class Department extends Component{
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+        };
+    }
+    componentWillMount() {
+        fetch(`/api/get-data/department/${this.props.match.params}`)
+            .then(response => response.json())
+            .then((courses) => {
+                this.setState({ data: courses });
+            })
+            .catch((error) => {
+            console.log(error);
+            });
+    }
     render(){
         return(
             <div className="container">
                 <div className="list-group">
-                    <Link to = {`/course/1`}> <a className="list-group-item list-group-item-action">電子學</a> </Link>
-                    <Link to = {`/course/2`}> <a className="list-group-item list-group-item-action">電路學</a> </Link>
-                    <Link to = {`/course/3`}> <a className="list-group-item list-group-item-action">微分方程</a> </Link>
-                    <Link to = {`/course/4`}> <a className="list-group-item list-group-item-action">交換電路</a> </Link>
+                    this.state.data.map(course => (
+                        <Link to = {`/course/${course._id}`}> <a className="list-group-item list-group-item-action">{`${course.name}`}</a> </Link>
+                    ))
                 </div>
             </div>
         )
