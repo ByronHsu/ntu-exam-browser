@@ -15,7 +15,8 @@ class Department extends Component{
         };
     }
     componentWillMount() {
-        fetch(`/api/get-data/department/${this.props.match.params}`)
+        //console.log(this.props.match.params.id); 
+        fetch(`/api/get-data/department/${this.props.match.params.id}`) 
             .then(response => response.json())
             .then((courses) => {
                 this.setState({ data: courses });
@@ -28,9 +29,11 @@ class Department extends Component{
         return(
             <div className="container">
                 <div className="list-group">
+                {
                     this.state.data.map(course => (
-                        <Link to = {`/course/${course._id}`}> <a className="list-group-item list-group-item-action">{`${course.name}`}</a> </Link>
+                        <Link to = {`/course/${course._id}`}> <a className="list-group-item list-group-item-action">{course.name}</a> </Link>
                     ))
+                }
                 </div>
             </div>
         )
