@@ -6,30 +6,26 @@ import {
   Switch,
 } from 'react-router-dom';
 import Department from '../Department/Department';
-import DepartmentLink from '../DepartmentLink/DepartmentLink'
+import DepartmentLink from '../DepartmentLink/DepartmentLink';
 
-class CategoryHome extends Component{
+class Category extends Component{
     render(){
         return(
             <div className="container">
                 <div className="row">
-                    <DepartmentLink path='1'/>
-                    <DepartmentLink path='2'/>
-                    <DepartmentLink path='3'/>
-                    <DepartmentLink path='4'/>
-                    <DepartmentLink path='5'/>
-                    <DepartmentLink path='6'/>
+                    <DepartmentLink path='EE'/>
+                    <DepartmentLink path='EE'/>
+                    <DepartmentLink path='EE'/>
+                    <DepartmentLink path='EE'/>
+                    <DepartmentLink path='EE'/>
+                    <DepartmentLink path='EE'/>
                 </div>
             </div>
         )
     }
 }
 
-const Category = () => (
-  <Switch>
-      <Route exact path="/category" component={()=>(<CategoryHome/>)} />
-      <Route path="/category/:id" component={()=>(<Department/>)} />
-  </Switch>
-);
+
 
 export default Category;
+ 
