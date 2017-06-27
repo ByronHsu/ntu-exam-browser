@@ -29,9 +29,13 @@ class Category extends Component{
         return(
             <div className="container">
                 <div className="row">
-                    this.state.data.map(department => (
-                        <DepartmentLink path='${department._id}'/>
+                {
+                    this.state.data.map((department,index) =>   
+                    (
+                        <DepartmentLink path={department._id} imgUrl ={index+1} / > 
                     ))
+                    
+                }
                 </div>
             </div>
         )

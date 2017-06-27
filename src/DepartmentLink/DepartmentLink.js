@@ -8,8 +8,8 @@ class DepartmentLink extends Component{
         return(
             <div className="DepartmentLink col-lg-3 col-md-6 col-sm-12">
                 <Link to ={`category/${this.props.path}`}>
-                <img src="./img/ee.jpg" className="img-fluid" alt="Responsive image"/>
-                </Link>
+                <img src={`img/${this.props.imgUrl}.jpg`} className="img-fluid" alt="Responsive image"/>
+                </Link> 
             </div>
         )
     }

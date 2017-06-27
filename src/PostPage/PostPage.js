@@ -17,27 +17,57 @@ cloudinary.uploader.upload("http://imgur.com/gallery/Os7JM", function(result) {
   console.log(result) 
 });*/
 class PostPage extends Component{
+    constructor() {
+        super();
+        this.state = {
+            department:' ',
+            course:' ',
+            departmentOptions:[],
+            courseOptions:[],
+        }; 
+    } 
+    componentWillMount() {
+        fetch('/api/get-data/category')
+            .then(response => response.json())
+            .then((departments) => {
+                this.setState({ departmentOptions: departments });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    handleSelectChange = (e) => {
+        this.setState({department:e.target.value});
+        fetch(`/api/get-data/department/name/${e.target.value}`)
+            .then(response => response.json())
+            .then((courses) => {
+                this.setState({ courseOptions: courses });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     render(){
         return(
             <form>
-            <div className="form-group">
+            <div className="form-group">  
                 <label for="exampleSelect1">Department</label>
-                <select className="form-control" id="exampleSelect1">
-                <option>EE</option>
-                <option>MED</option>
-                <option>CS</option>
-                <option>HIS</option>
-                <option>CHE</option>
-                </select>
+                <select className="form-control" id="exampleSelect1" onChange={this.handleSelectChange}  >
+                    { 
+                        this.state.departmentOptions.map(department => (
+                            <option>{department.name}</option>
+                        ))
+                    }
+                </select> 
             </div>
             <div className="form-group">
                 <label for="exampleSelect1">Course</label>
                 <select className="form-control" id="exampleSelect1">
-                <option>電子</option>
-                <option>電路</option>
-                <option>電磁</option>
-                <option>交電</option>
-                <option>微方</option>
+                { 
+                    this.state.courseOptions.map(course => (
+                        <option>{course.name}</option>
+                    )) 
+                }
                 </select>
             </div>
             <div className="form-group">

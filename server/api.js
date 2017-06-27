@@ -30,7 +30,12 @@ addDepartment = (name, imgUrl) => {
     if(err) return handleError(err);
   });
 }
-
+/*
+let names=['電機系','化學系','財金系','法律系','歷史系','醫學系'];
+let imgUrls=['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg'];
+for(let i=0;i<6;i++){
+    addDepartment(names[i],imgUrls[i]);
+}*/
 addCourse = (name, departmentId) => {
   let temp = new course({name: name, departmentId: departmentId});
   temp.save((err) => {
@@ -38,13 +43,27 @@ addCourse = (name, departmentId) => {
   });
   // console.log(departmentId);
 }
+/*
+let names=[['電磁學','電子學'],['普通化學','進階化學'],['如何成為Elite?','炒股教學'],['如何吉人?','民法'],['秦朝','漢朝'],['普通醫學','外科']];
+let departmentIds=['59520d8ab87f2c1e2d5c0f9e','59520d8ab87f2c1e2d5c0f9f',"59520d8ab87f2c1e2d5c0fa0","59520d8ab87f2c1e2d5c0fa1","59520d8ab87f2c1e2d5c0fa2","59520d8ab87f2c1e2d5c0fa3"];
+for(let i=0;i<6;i++){
+    for(let j=0;j<names[i].length;j++)
+    addCourse(names[i][j],departmentIds[i]);
+}*/
 
 addExam = (name, courseId, ownerId) => {
-  let temp = new exam({name: name, courseId: categoryId, ownerId: ownerId});
+  let temp = new exam({name: name, courseId: courseId, ownerId: ownerId});
   temp.save((err) => {
     if(err) return handleError(err);
   });
 }
+/*
+let names=[['電磁上','電磁下'],['普化上','普化下'],['進化上','進化下'],['電子上','電子下']];
+let courseIds=["59520fa38aa9241ee4523f36","59520fa38aa9241ee4523f38","59520fa38aa9241ee4523f39","59520fa38aa9241ee4523f37"];
+for(let i=0;i<names.length;i++){
+    for(let j=0;j<names[i].length;j++)
+      addExam(names[i][j],courseIds[i]);
+}*/
 
 addPage = (examId, pageNumber, content, img) => {
   let temp = new page({examId: examId, pageNumber: pageNumber, content: content, img: img});
@@ -76,6 +95,20 @@ router.get('/get-data/category', (req, res, next) => {
   department.find({})
     .exec((err, data) => {
       res.json(data);
+    });
+});
+
+router.get('/get-data/department/name/:name', (req, res, next) => {
+  const name = req.params.name;
+  let departId;
+  department.find({name: name})
+    .exec((err, data) => {
+      departId=data[0]._id;
+      course.find({departmentId: departId})
+        .exec((err, data) => {
+          console.log(data);
+          res.json(data);
+        }); 
     });
 });
 

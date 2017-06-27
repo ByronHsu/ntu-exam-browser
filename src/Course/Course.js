@@ -14,22 +14,25 @@ class Course extends Component{
         };
     }
     componentWillMount() {
-        fetch(`/api/get-data/course/${this.props.match.params}`)
+        console.log(this.props.match.params.id); 
+        fetch(`/api/get-data/course/${this.props.match.params.id}`)
             .then(response => response.json())
             .then((exampages) => {
                 this.setState({ data: exampages });
             })
             .catch((error) => {
             console.log(error);
-            });
+            });     
     }
     render(){
         return(
             <div className="container">
                 <div className="list-group">
+                {
                     this.state.data.map(exampage => (
-                        <Link to = {`/exampage/${exampage._id}`}> <a className="list-group-item list-group-item-action">{`${exampage.name}`}</a> </Link>
+                        <Link to = {`/exampage/${exampage._id}`}> <a className="list-group-item list-group-item-action">{exampage.name}</a> </Link>
                     ))
+                }
                 </div>
             </div>
         )
