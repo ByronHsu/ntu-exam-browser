@@ -9,16 +9,29 @@ import Department from '../Department/Department';
 import DepartmentLink from '../DepartmentLink/DepartmentLink';
 
 class Category extends Component{
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+        };
+    }
+    componentWillMount() {
+        fetch('/api/get-data/category')
+                .then(response => response.json())
+                .then((departments) => {
+                    this.setState({ data: departments });
+                })
+                .catch((error) => {
+                console.log(error);
+                });
+    }
     render(){
         return(
             <div className="container">
                 <div className="row">
-                    <DepartmentLink path='EE'/>
-                    <DepartmentLink path='EE'/>
-                    <DepartmentLink path='EE'/>
-                    <DepartmentLink path='EE'/>
-                    <DepartmentLink path='EE'/>
-                    <DepartmentLink path='EE'/>
+                    this.state.data.map(department => (
+                        <DepartmentLink path='${department._id}'/>
+                    ))
                 </div>
             </div>
         )

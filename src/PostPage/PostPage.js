@@ -6,7 +6,16 @@ import {
   Switch,
 } from 'react-router-dom';
 import './PostPage.css';
-
+/*
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'ntu-exam-browswer', 
+  api_key: '575565893452142', 
+  api_secret: 'pl9MJ6fRRBsDEP99cHWWike8lOM'
+})
+cloudinary.uploader.upload("http://imgur.com/gallery/Os7JM", function(result) { 
+  console.log(result) 
+});*/
 class PostPage extends Component{
     render(){
         return(

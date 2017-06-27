@@ -7,14 +7,29 @@ import {
 } from 'react-router-dom';
 
 class Course extends Component{
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+        };
+    }
+    componentWillMount() {
+        fetch(`/api/get-data/course/${this.props.match.params}`)
+            .then(response => response.json())
+            .then((exampages) => {
+                this.setState({ data: exampages });
+            })
+            .catch((error) => {
+            console.log(error);
+            });
+    }
     render(){
         return(
             <div className="container">
                 <div className="list-group">
-                    <Link to = {`/exampage/1`}>  <a className="list-group-item list-group-item-action">100-1</a> </Link>
-                    <Link to = {`/exampage/2`}>  <a className="list-group-item list-group-item-action">100-2</a> </Link>
-                    <Link to = {`/exampage/3`}>  <a className="list-group-item list-group-item-action">101-1</a> </Link>
-                    <Link to = {`/exampage/4`}>  <a className="list-group-item list-group-item-action">101-2</a> </Link>
+                    this.state.data.map(exampage => (
+                        <Link to = {`/exampage/${exampage._id}`}> <a className="list-group-item list-group-item-action">{`${exampage.name}`}</a> </Link>
+                    ))
                 </div>
             </div>
         )
