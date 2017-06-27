@@ -4,55 +4,88 @@ const router = express.Router();
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 if (process.env.NODE_ENV !== 'test') {
-  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/ntu-exam');
+  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/ntu-exam-browser');
 }
 var Schema = mongoose.Schema;
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-var departmentSchema = new Schema({name:'string',img:'string',courseId:['ObjectId']});
-var department = mongoose.model('department',departmentSchema);
-var courseSchema = new Schema({name:'string',departmentId:'ObjectId',examId:['ObjectId']});
-var course = mongoose.model('course',courseSchema);
+var categorySchema = new Schema({name: 'string', imgUrl: 'string'});
+var category = mongoose.model('category', categorySchema);
+var courseSchema = new Schema({name: 'string', categoryId: 'string'});
+var course = mongoose.model('course', courseSchema);
+var examSchema = new Schema({name: 'string', courseId: 'string', ownerId: 'string'});
+var exam = mongoose.model('exam', examSchema);
+var pageSchema = new Schema({examId: 'string', pageNumber: 'int', content: 'string', img: [{imgUrl: 'string'}]});
+var page = mongoose.model('page', pageSchema);
+var answerSchema = new Schema({pageId: 'string', content: 'string', ownerId: 'string', likeCnt: 'int'});
+var answer = mongoose.model('answer', answerSchema);
+var commentSchema = new Schema({answerId: 'string', content: 'string', ownerId: 'string'});
+var comment = mongoose.model('comment', commentSchema);
 
-addDepartment = (name,img)=>{
-    let tem = new department({name:name,img:img});
-    tem.save((err)=>{
+addCategory = (name, imgUrl) => {
+    let temp = new category({name: name, imgUrl: imgUrl});
+    temp.save((err) => {
         if(err) return handleError(err);
     });
 }
-addCourse = (name,departmentId)=>{
-    let tem = new course({name:name,departmentId:departmentId});
-    tem.save((err)=>{
+
+addCourse = (name, categoryId) => {
+    let temp = new course({name: name, categoryId: categoryId});
+    temp.save((err) => {
         if(err) return handleError(err);
     });
-    console.log(departmentId);
-    department.findByIdAndUpdate({
-        departmentId
-    }, {
-        $push: { courseId : '5950c67f0dddbdea92973076' }
-    },{new: true});
+    // console.log(categoryId);
 }
-//addDepartment('NTUEE','1.jpg');
-//addDepartment('NTUMED','2.jpg');
+
+addExam = (name, courseId, ownerId) => {
+    let temp = new exam({name: name, courseId: categoryId, ownerId: ownerId});
+    temp.save((err) => {
+        if(err) return handleError(err);
+    });
+}
+
+addPage = (examId, pageNumber, content, img) => {
+    let temp = new page({examId: examId, pageNumber: pageNumber, content: content, img: img});
+    temp.save((err) => {
+        if(err) return handleError(err);
+    });
+}
+
+addAnswer = (pageId, content, ownerId, likeCnt) => {
+    let temp = new answer({pageId: pageId, content: content, ownerId: ownerId, likeCnt: likeCnt});
+    temp.save((err) => {
+        if(err) return handleError(err);
+    });
+}
+
+addComment = (answerId, content, ownerId) => {
+    let temp = new exam({answerId: answerId, content: content, ownerId: ownerId});
+    temp.save((err) => {
+        if(err) return handleError(err);
+    });
+}
+
+addCategory('NTUEE','1.jpg');
+addCategory('NTUMED','2.jpg');
 addCourse('電子學','5950e13485d7b5f279d55053');
 addCourse('電路學','5950e13485d7b5f279d55053');
 
-router.get('/get-data/department', function(req, res, next) {
-  department.find()
-      .then((doc) => {
-        res.json(doc);
-      });
-});
-router.get('/get-data/:id/course', function(req, res, next) {
-  const ID = req.params.id
-  course.find()
-      .where('departmentId').equals(ID)
+router.get('/get-data/category', function(req, res, next) {
+  category.find()
       .then((doc) => {
         res.json(doc);
       });
 });
 
+router.get('/get-data/:id/course', function(req, res, next) {
+  const ID = req.params.id
+  course.find()
+      .where('categoryId').equals(ID)
+      .then((doc) => {
+        res.json(doc);
+      });
+});
 
 
 
