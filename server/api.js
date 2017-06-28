@@ -144,11 +144,18 @@ router.get('/user', (req, res) => {
       res.json('NO');
     } else if(typeof(req.user) === 'string') {
       // res.redirect(`/api/add-user/${req.user}`);
-      let temp = new user({studentId: req.user, fbId: req.session.passport.user.id});
-      temp.save((err) => {
-        if(err) return handleError(err);
-      });
-      res.json(req.user);
+      user.findOne({studentId: req.user})
+        .exec((err, data) => {
+          if(data === null) {
+            let temp = new user({studentId: req.user, fbId: req.session.passport.user.id});
+            temp.save((err) => {
+              if(err) return handleError(err);
+            });
+          }
+          res.json(req.user);
+        });
+
+      
     } else {
       user.findOne({fbId: req.user.id})
         .exec((err, data) => {

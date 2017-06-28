@@ -13,6 +13,8 @@ import Home from '../Home/Home';
 import PostPage from '../PostPage/PostPage';
 import ExamPage from '../ExamPage/ExamPage';
 import LoginPage from '../LoginPage/LoginPage';
+import Signup from '../LoginPage/Signup';
+import Sent from '../LoginPage/Sent';
 import 'disable-react-devtools';
 import $ from 'jquery'; 
 
@@ -26,7 +28,8 @@ class Controller extends Component{
   constructor() {
     super();
     this.state = {
-      user: null
+      user: null,
+      signup: false
     };
   }
   componentWillMount = () => {
@@ -35,14 +38,7 @@ class Controller extends Component{
       .then((data) => {
         console.log(data);
         if(data === 'MAIL') {
-          fetch('/mail/sendtoken', {
-            method: 'post',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({user: 'b05901062'})
-          });
+          this.setState({signup: true});
         } else if(data !== 'NO') {
           this.setState({user: data});
         }
@@ -68,7 +64,7 @@ class Controller extends Component{
                                           <a className="btn btn-secondary" href="#" role="button">{this.state.user}</a> }
             </nav>
           </div>
-
+          {this.state.signup === true ? <Redirect to="/signup" /> : null}
           <div>
             <Route exact path="/" component={Home} />
             <Route exact path="/_=_" component={() => <Redirect to="/" />} />
@@ -78,6 +74,8 @@ class Controller extends Component{
             <Route exact path="/exampage/:id" component={ExamPage} />
             <Route path="/postpage" component={PostPage} />
             <Route path="/loginpage" component={LoginPage}/>
+            <Route path="/signup" component={Signup} />
+            <Route path="/authentication" component={Sent} />
           </div>
         </div>
 
