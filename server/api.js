@@ -15,14 +15,99 @@ var departmentSchema = new Schema({name: 'string', imgUrl: 'string'});
 var department = mongoose.model('department', departmentSchema);
 var courseSchema = new Schema({name: 'string', departmentId: 'string'});
 var course = mongoose.model('course', courseSchema);
-var examSchema = new Schema({name: 'string', courseId: 'string', ownerId: 'string'});
+var examSchema = new Schema({name: 'string', courseId: 'string', numOfPages:'number',ownerId: 'string'});
 var exam = mongoose.model('exam', examSchema);
-var pageSchema = new Schema({examId: 'string', pageNumber: 'number', content: 'string', img: [{imgUrl: 'string'}]});
+var pageSchema = new Schema({examId: 'string', pageNumber: 'number', content: 'string', imgUrl: 'string'});
 var page = mongoose.model('page', pageSchema);
 var answerSchema = new Schema({pageId: 'string', content: 'string', ownerId: 'string', likeCnt: 'number'});
 var answer = mongoose.model('answer', answerSchema);
 var commentSchema = new Schema({answerId: 'string', content: 'string', ownerId: 'string'});
 var comment = mongoose.model('comment', commentSchema);
+
+router.post('/insert/exam/:name', function(req, res, next) {
+  const examData = req.body;
+  const name = req.params.name;
+
+  course.find({name:name})
+    .exec((err, data) => {
+      const courseId=data[0]._id;
+      course.find({courseId: courseId})
+        .exec((err, data) => {
+          //console.log(data);
+          const examTemp = new exam({name: examData.examName, courseId: courseId, numOfPages:examData.text.length});
+          //console.log(examTemp);
+          examTemp.save((err) => {
+            if(err) return handleError(err);
+          });
+          //console.log(examData)
+          for(let i=1;i<=examData.text.length;i++){
+            const pageTemp = new page({examId: examTemp._id, pageNumber: i, content: examData.text[i-1], imgUrl: examData.imgUrl[i-1]});
+            //console.log(pageTemp);
+            pageTemp.save((err) => {
+              if(err) return handleError(err);
+            });
+          }
+          return examTemp;
+        });
+    }).then((e)=>{/*console.log(e[0]._id);res.redirect(`/exampage/${e[0]._id}`);*/});
+    
+});
+
+router.get('/get-data/singlepage', (req, res, next)=> {
+  //console.log(req.query);
+  page.find({pageNumber: req.query.pageNumber,examId:req.query.examId})
+    .exec((err, data) => {
+      //console.log(data);
+      res.json(data);
+    });
+})
+
+router.get('/get-data/category', (req, res, next) => {
+  department.find({})
+    .exec((err, data) => {
+      res.json(data);
+    });
+});
+
+router.get('/get-data/exam/:id', (req, res, next) => {
+  const ID = req.params.id;
+  exam.find({_id: ID})
+    .exec((err, data) => {
+      res.json(data);
+    });
+});
+
+router.get('/get-data/department/name/:name', (req, res, next) => {
+  const name = req.params.name;
+  let departId;
+  department.find({name: name})
+    .exec((err, data) => {
+      departId=data[0]._id;
+      course.find({departmentId: departId})
+        .exec((err, data) => {
+          //console.log(data);
+          res.json(data);
+        }); 
+    });
+});
+
+router.get('/get-data/department/:id', (req, res, next) => {
+  const ID = req.params.id;
+  course.find({departmentId: ID})
+    .exec((err, data) => {
+      res.json(data);
+    });
+});
+
+router.get('/get-data/course/:id', (req, res, next) => {
+  const ID = req.params.id;
+  exam.find({courseId: ID})
+    .exec((err, data) => {
+      res.json(data);
+    });
+});
+
+
 
 addDepartment = (name, imgUrl) => {
   let temp = new department({name: name, imgUrl: imgUrl});
@@ -44,7 +129,7 @@ addCourse = (name, departmentId) => {
   // console.log(departmentId);
 }
 /*
-let names=[['電磁學','電子學'],['普通化學','進階化學'],['如何成為Elite?','炒股教學'],['如何吉人?','民法'],['秦朝','漢朝'],['普通醫學','外科']];
+let names=[['電磁學','電子學'],['普通化學','進階化學'],['如何成為Elite','炒股教學'],['如何吉人','民法'],['秦朝','漢朝'],['普通醫學','外科']];
 let departmentIds=['59520d8ab87f2c1e2d5c0f9e','59520d8ab87f2c1e2d5c0f9f',"59520d8ab87f2c1e2d5c0fa0","59520d8ab87f2c1e2d5c0fa1","59520d8ab87f2c1e2d5c0fa2","59520d8ab87f2c1e2d5c0fa3"];
 for(let i=0;i<6;i++){
     for(let j=0;j<names[i].length;j++)
@@ -91,49 +176,6 @@ addComment = (answerId, content, ownerId) => {
 // addCourse('電子學','5950e13485d7b5f279d55053');
 // addCourse('電路學','5950e13485d7b5f279d55053');
 
-router.get('/get-data/category', (req, res, next) => {
-  department.find({})
-    .exec((err, data) => {
-      res.json(data);
-    });
-});
 
-router.get('/get-data/department/name/:name', (req, res, next) => {
-  const name = req.params.name;
-  let departId;
-  department.find({name: name})
-    .exec((err, data) => {
-      departId=data[0]._id;
-      course.find({departmentId: departId})
-        .exec((err, data) => {
-          console.log(data);
-          res.json(data);
-        }); 
-    });
-});
-
-router.get('/get-data/department/:id', (req, res, next) => {
-  const ID = req.params.id;
-  course.find({departmentId: ID})
-    .exec((err, data) => {
-      res.json(data);
-    });
-});
-
-router.get('/get-data/course/:id', (req, res, next) => {
-  const ID = req.params.id;
-  exam.find({courseId: ID})
-    .exec((err, data) => {
-      res.json(data);
-    });
-});
-
-router.get('/get-data/exam/:id', (req, res, next) => {
-  const ID = req.params.id;
-  page.find({examId: ID})
-    .exec((err, data) => {
-      res.json(data);
-    });
-});
 
 module.exports = router;

@@ -1,0 +1,7 @@
+.pageImg{
+    max-height:20em;
+}
+.imgDiv{
+    display:flex;
+    justify-content:center;
+}

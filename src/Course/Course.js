@@ -14,7 +14,7 @@ class Course extends Component{
         };
     }
     componentWillMount() {
-        console.log(this.props.match.params.id); 
+        //console.log(this.props.match.params.id); 
         fetch(`/api/get-data/course/${this.props.match.params.id}`)
             .then(response => response.json())
             .then((exampages) => {

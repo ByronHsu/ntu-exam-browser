@@ -6,24 +6,16 @@ import {
   Switch,
 } from 'react-router-dom';
 import './PostPage.css';
-/*
-var cloudinary = require('cloudinary');
-cloudinary.config({ 
-  cloud_name: 'ntu-exam-browswer', 
-  api_key: '575565893452142', 
-  api_secret: 'pl9MJ6fRRBsDEP99cHWWike8lOM'
-})
-cloudinary.uploader.upload("http://imgur.com/gallery/Os7JM", function(result) { 
-  console.log(result) 
-});*/
+
 class PostPage extends Component{
     constructor() {
         super();
         this.state = {
             department:' ',
-            course:' ',
             departmentOptions:[],
             courseOptions:[],
+            text:['',],
+            imgUrl:['',],
         }; 
     } 
     componentWillMount() {
@@ -36,7 +28,7 @@ class PostPage extends Component{
                 console.log(error);
             });
     }
-    handleSelectChange = (e) => {
+    selectOnChange = (e) => {
         this.setState({department:e.target.value});
         fetch(`/api/get-data/department/name/${e.target.value}`)
             .then(response => response.json())
@@ -47,12 +39,40 @@ class PostPage extends Component{
                 console.log(error);
             });
     }
+    nextPageOnClick = () =>{
+        let text=this.state.text;
+        let imgUrl=this.state.imgUrl;
+        text.push('');
+        imgUrl.push('');
+        this.setState({text:text,imgUrl:imgUrl});
+    }
+    submitOnClick = () => {
+        let text=[],imgUrl=[];
+        this.state.text.forEach((entry)=>{text.push(entry.value)});
+        this.state.imgUrl.forEach((entry)=>{imgUrl.push(entry.value)});
+        const exam = { 
+            examName:this.refs.examName.value,
+            text: text,
+            imgUrl: imgUrl,
+        }; 
+
+        //console.log(exam);
+        
+        fetch(`/api/insert/exam/${this.refs.course.value}`, {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(exam),
+        });
+    }
     render(){
         return(
-            <form>
+            <form onSubmit={(e)=>{e.preventDefault()}}>
             <div className="form-group">  
-                <label for="exampleSelect1">Department</label>
-                <select className="form-control" id="exampleSelect1" onChange={this.handleSelectChange}  >
+                <label >Department</label>
+                <select className="form-control" onChange={this.selectOnChange}  >
                     { 
                         this.state.departmentOptions.map(department => (
                             <option>{department.name}</option>
@@ -61,8 +81,8 @@ class PostPage extends Component{
                 </select> 
             </div>
             <div className="form-group">
-                <label for="exampleSelect1">Course</label>
-                <select className="form-control" id="exampleSelect1">
+                <label >Course</label>
+                <select className="form-control" ref='course'>
                 { 
                     this.state.courseOptions.map(course => (
                         <option>{course.name}</option>
@@ -71,14 +91,27 @@ class PostPage extends Component{
                 </select>
             </div>
             <div className="form-group">
-                <label for="exampleTextarea">Textarea</label>
-                <textarea className="newPage form-control" id="exampleTextarea" rows="3"></textarea>
+                <label>Exam Name</label>
+                <input ref='examName' className="form-control" type="text" id="example-text-input"/>
             </div>
-            <div className="form-group">
-                <label for="exampleInputFile">File input</label>
-                <input type="file" className="form-control-file" id="exampleInputFile" aria-describedby="fileHelp"/>
-            </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+            {
+                this.state.text.map((text,index) =>   
+                (
+                    <div className="container-fluid">
+                        <div className="form-group">
+                            <label>Textarea</label>
+                            <textarea ref={(node)=>{this.state.text[index]=node}} className="newPage form-control" rows="10" ></textarea>
+                        </div>
+                        <div className="form-group">
+                            <label>URL</label>
+                            <input ref={(node)=>{this.state.imgUrl[index]=node}} className="form-control" type="url" />
+                        </div>
+                    </div>
+                ))
+                
+            }
+            <Link to= "/"><button type="submit" className="btn btn-primary" onClick={this.submitOnClick}>Submit</button></Link>
+            <button type="button" className="btn btn-secondary" onClick={this.nextPageOnClick}>Next Page</button>
             </form>
         )
     }

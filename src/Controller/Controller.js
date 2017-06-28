@@ -42,7 +42,7 @@ const Controller = () => (
         <Route exact path="/category" component={()=>(<Category/>)} />
         <Route exact path="/category/:id" component={(props)=>(<Department {...props}/>)} />
         <Route exact path="/course/:id" component={(props)=>(<Course {...props}/>)} />
-        <Route exact path="/exampage/:id" component={()=>(<ExamPage />)} />
+        <Route exact path="/exampage/:id" component={(props)=>(<ExamPage {...props}/>)} />
         <Route path="/postpage" component={()=>(<PostPage/>)} /> 
       </Switch>
     </div>
