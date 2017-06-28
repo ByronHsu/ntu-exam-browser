@@ -22,7 +22,7 @@ class Department extends Component{
                 this.setState({ data: courses });
             })
             .catch((error) => {
-            console.log(error);
+                console.log(error);
             });
     }
     render(){

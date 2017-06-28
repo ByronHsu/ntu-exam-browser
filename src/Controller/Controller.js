@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Link,
   Switch,
+  Redirect
 } from 'react-router-dom';
 import Category from '../Category/Category';
 import Department from '../Department/Department';
@@ -11,6 +12,7 @@ import Course from '../Course/Course';
 import Home from '../Home/Home';
 import PostPage from '../PostPage/PostPage';
 import ExamPage from '../ExamPage/ExamPage';
+import LoginPage from '../LoginPage/LoginPage';
 import $ from 'jquery'; 
 
 $(document).ready(function(){
@@ -34,17 +36,20 @@ const Controller = () => (
               <Link to="/category"><a className="nav-item nav-link">Category</a></Link>
             </div>
           </div>
+          <Link to="/loginpage"><a className="btn btn-secondary" href="#" role="button">Login</a></Link>
         </nav>
       </div>
 
-      <Switch>
-        <Route exact path="/" component={()=>(<Home/>)} />
-        <Route exact path="/category" component={()=>(<Category/>)} />
+      <div>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/_=_" render={() => <Redirect to="/" />} />
+        <Route exact path="/category" component={Category} />
         <Route exact path="/category/:id" component={(props)=>(<Department {...props}/>)} />
         <Route exact path="/course/:id" component={(props)=>(<Course {...props}/>)} />
-        <Route exact path="/exampage/:id" component={()=>(<ExamPage />)} />
-        <Route path="/postpage" component={()=>(<PostPage/>)} /> 
-      </Switch>
+        <Route exact path="/exampage/:id" component={ExamPage} />
+        <Route path="/postpage" component={PostPage} />
+        <Route path="/loginpage" component={LoginPage}/>
+      </div>
     </div>
 
   </Router>

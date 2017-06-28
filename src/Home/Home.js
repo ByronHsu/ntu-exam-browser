@@ -19,7 +19,7 @@ class Home extends Component{
                     <p>Try now and add a post!</p>
                     <p className="lead">
                         <Link to="/postpage"><a className="btn btn-secondary" href="#" role="button">Add a post!</a></Link>
-                        <Link to="/loginpage"><a className="btn btn-secondary" href="#" role="button">Login</a></Link>
+                        
                     </p>
                 </div>
             </div>
