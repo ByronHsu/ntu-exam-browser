@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const mongoose = require('mongoose');
+const passport = require('passport');
 mongoose.Promise = global.Promise;
 if (process.env.NODE_ENV !== 'test') {
   mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/ntu-exam-browser');
@@ -23,6 +24,8 @@ var answerSchema = new Schema({pageId: 'string', content: 'string', ownerId: 'st
 var answer = mongoose.model('answer', answerSchema);
 var commentSchema = new Schema({answerId: 'string', content: 'string', ownerId: 'string'});
 var comment = mongoose.model('comment', commentSchema);
+var userSchema = new Schema({studentId: 'string', fbId: 'string'});
+var user = mongoose.model('user', userSchema);
 
 addDepartment = (name, imgUrl) => {
   let temp = new department({name: name, imgUrl: imgUrl});
@@ -135,5 +138,36 @@ router.get('/get-data/exam/:id', (req, res, next) => {
       res.json(data);
     });
 });
+
+router.get('/user', (req, res) => {
+    if(req.user === undefined) {
+      res.json('NO');
+    } else if(typeof(req.user) === 'string') {
+      // res.redirect(`/api/add-user/${req.user}`);
+      let temp = new user({studentId: req.user, fbId: req.session.passport.user.id});
+      temp.save((err) => {
+        if(err) return handleError(err);
+      });
+      res.json(req.user);
+    } else {
+      user.findOne({fbId: req.user.id})
+        .exec((err, data) => {
+          console.log(data);
+          if(data === null) {
+            res.json('MAIL');
+          } else {
+            res.json(data.studentId);
+          }
+        });
+    }
+    // console.log(req);
+  }
+);
+
+// router.get('/add-user/:id', passport.authenticate('facebook'), (req, res) => {
+//   console.log(req);
+//   let temp = new user({studentId: req.params.id, fbId: req.user.id});
+//   res.redirect('/');
+// });
 
 module.exports = router;
