@@ -24,7 +24,22 @@ var answer = mongoose.model('answer', answerSchema);
 var commentSchema = new Schema({answerId: 'string', content: 'string', ownerId: 'string'});
 var comment = mongoose.model('comment', commentSchema);
 
-router.post('/insert/exam/:name', function(req, res, next) {
+router.post('/insert/comment',(req,res,next)=>{
+  let temp = new comment(req.body);
+  temp.save((err) => {
+    if(err) return handleError(err);
+  });
+  res.send(temp._id);
+})
+
+router.post('/insert/Answer',(req,res,next)=>{
+  let temp = new answer(req.body);
+  temp.save((err) => {
+    if(err) return handleError(err);
+  });
+  res.send(temp._id);
+})
+router.post('/insert/exam/:name', (req, res, next)=> {
   const examData = req.body;
   const name = req.params.name;
 
@@ -52,6 +67,24 @@ router.post('/insert/exam/:name', function(req, res, next) {
     }).then((e)=>{/*console.log(e[0]._id);res.redirect(`/exampage/${e[0]._id}`);*/});
     
 });
+
+router.get('/get-data/answer/:id', (req, res, next)=> {
+  const ID = req.params.id;
+  comment.find({answerId: ID})
+    .exec((err, data) => {
+      //console.log(data);
+      res.json(data);
+    });
+})
+
+router.get('/get-data/singlepageAnswers/:id', (req, res, next)=> {
+  const ID = req.params.id;
+  answer.find({pageId: ID})
+    .exec((err, data) => {
+      //console.log(data);
+      res.json(data);
+    });
+})
 
 router.get('/get-data/singlepage', (req, res, next)=> {
   //console.log(req.query);

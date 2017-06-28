@@ -6,7 +6,7 @@ import {
   Switch,
 } from 'react-router-dom';
 import SinglePage from '../SinglePage/SinglePage';
-
+import './ExamPage.css';
 class ExamPage extends Component{
     constructor() {
         super();
@@ -34,8 +34,7 @@ class ExamPage extends Component{
         for(let i=0;i<this.state.numOfPages;i++)
             array.push(i);
         return(
-            <div className="container fluid">
-                <SinglePage examId={this.props.match.params.id} pageNumber={this.state.pageNumber}/>
+            <div className="container-fluid">
                 <nav aria-label="Page navigation example">
                     <ul className="pagination">
                     {
@@ -46,6 +45,7 @@ class ExamPage extends Component{
                     }
                     </ul>
                 </nav>
+                <SinglePage examId={this.props.match.params.id} pageNumber={this.state.pageNumber}/>
             </div>
         )
     }
@@ -53,3 +53,4 @@ class ExamPage extends Component{
 
 
 export default ExamPage;
+
