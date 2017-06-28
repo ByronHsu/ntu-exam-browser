@@ -1,0 +1,37 @@
+.comments-list {
+  padding: 0;
+  margin-top: 20px;
+  list-style-type: none;
+}
+.comments-list .comment {
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+}
+.comments-list .comment .avatar {
+  width: 35px;
+  height: 35px;
+}
+.comments-list .comment .comment-heading {
+  display: block;
+  width: 100%;
+}
+.comments-list .comment .comment-heading .user {
+  font-size: 14px;
+  font-weight: bold;
+  display: inline;
+  margin-top: 0;
+  margin-right: 10px;
+}
+.comments-list .comment .comment-heading .time {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 0;
+  display: inline;
+}
+.comments-list .comment .comment-body {
+  margin-left: 50px;
+}
+.comments-list .comment > .comments-list {
+  margin-left: 50px;
+} 

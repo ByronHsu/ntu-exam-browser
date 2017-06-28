@@ -78,7 +78,6 @@ class Controller extends Component{
             <Route path="/authentication" component={Sent} />
           </div>
         </div>
-
       </Router>
     );
   }
