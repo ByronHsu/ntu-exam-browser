@@ -47,7 +47,7 @@ class ExamPage extends Component{
                         </ul>
                     </nav>
                 </div>
-                <SinglePage examId={this.props.match.params.id} pageNumber={this.state.pageNumber}/>
+                <SinglePage examId={this.props.match.params.id} pageNumber={this.state.pageNumber} user={this.props.user}/>
             </div>
         ) 
     }

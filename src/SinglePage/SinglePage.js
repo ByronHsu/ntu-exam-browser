@@ -66,6 +66,7 @@ class SinglePage extends Component{
         let Answer = {
             pageId:this.state.pageData._id,
             content:this.refs.text.value,
+            ownerId:this.props.user,
         }
 
         fetch(`/api/insert/Answer`, {
@@ -83,6 +84,7 @@ class SinglePage extends Component{
                 pageId:this.state.pageData._id,
                 _id:res,
                 content:this.refs.text.value,
+                ownerId:this.props.user,
             }
             console.log(answerToPush);
             answerData.push(answerToPush);
@@ -99,10 +101,10 @@ class SinglePage extends Component{
                         <div className="post-heading">
                             <div className="pull-left image">
                                 <img src="http://bootdey.com/img/Content/user_1.jpg" className="img-circle avatar" alt="user profile image"/>
-                            </div>
+                            </div> 
                             <div className="pull-left meta">
                                 <div className="title h5">
-                                    <a href="#"><b>Ryan Haywood </b></a>
+                                    <a href="#"><b>{this.state.pageData.ownerId} </b></a>
                                     made a post.
                                 </div>
                                 <h6 className="text-muted time">1 minute ago</h6>
@@ -125,12 +127,12 @@ class SinglePage extends Component{
                         <ul className="comments-list">
                         {
                             this.state.answerData.map((entry)=>(
-                                <Answer content={entry.content} id={entry._id}/>
+                                <Answer content={entry.content} id={entry._id} ownerId={entry.ownerId} user={this.props.user}/>
                             ))
                         }
                         </ul>
-                        <textarea ref='text' className="form-control" rows="3"></textarea>
-                        <button type="submit" className="btn btn-secondary" onClick={this.AnswerOnClick}>Answer!</button>
+                        {this.props.user===null?null:<textarea ref='text' className="form-control" rows="3"></textarea>}
+                        {this.props.user===null?null:<button type="submit" className="btn btn-secondary" onClick={this.AnswerOnClick}>Answer!</button>}
                     </div>
                 </div>
             </div>

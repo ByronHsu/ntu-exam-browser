@@ -32,7 +32,7 @@ class Category extends Component{
                 {
                     this.state.data.map((department,index) =>   
                     (
-                        <DepartmentLink path={department._id} imgUrl ={index+1} / > 
+                        <DepartmentLink path={department._id} imgUrl ={department.imgUrl} / > 
                     ))
                     
                 }

@@ -6,7 +6,7 @@ import {
   Switch,
 } from 'react-router-dom';
 import './PostPage.css';
-
+ 
 class PostPage extends Component{
     constructor() {
         super();
@@ -66,7 +66,9 @@ class PostPage extends Component{
             examName:this.refs.examName.value,
             text: text,
             imgUrl: imgUrl,
-        }; 
+            ownerId:this.props.user,
+        };  
+        console.log(exam);
 
         //console.log(exam);
         

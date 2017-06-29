@@ -18,7 +18,7 @@ var courseSchema = new Schema({name: 'string', departmentId: 'string'});
 var course = mongoose.model('course', courseSchema);
 var examSchema = new Schema({name: 'string', courseId: 'string', numOfPages:'number',ownerId: 'string'});
 var exam = mongoose.model('exam', examSchema);
-var pageSchema = new Schema({examId: 'string', pageNumber: 'number', content: 'string', imgUrl: 'string'});
+var pageSchema = new Schema({examId: 'string', pageNumber: 'number', content: 'string', imgUrl: 'string',ownerId: 'string'});
 var page = mongoose.model('page', pageSchema);
 var answerSchema = new Schema({pageId: 'string', content: 'string', ownerId: 'string', likeCnt: 'number'});
 var answer = mongoose.model('answer', answerSchema);
@@ -52,15 +52,14 @@ router.post('/insert/exam/:name', (req, res, next)=> {
       course.find({courseId: courseId})
         .exec((err, data) => {
           //console.log(data);
-          const examTemp = new exam({name: examData.examName, courseId: courseId, numOfPages:examData.text.length});
+          const examTemp = new exam({name: examData.examName, courseId: courseId, numOfPages:examData.text.length,ownerId:examData.ownerId});
           //console.log(examTemp);
           examTemp.save((err) => {
             if(err) return handleError(err);
           });
           //console.log(examData)
           for(let i=1;i<=examData.text.length;i++){
-            const pageTemp = new page({examId: examTemp._id, pageNumber: i, content: examData.text[i-1], imgUrl: examData.imgUrl[i-1]});
-            //console.log(pageTemp);
+            const pageTemp = new page({examId: examTemp._id, pageNumber: i, content: examData.text[i-1], imgUrl: examData.imgUrl[i-1],ownerId:examData.ownerId});
             pageTemp.save((err) => {
               if(err) return handleError(err);
             });
@@ -234,7 +233,7 @@ router.get('/user', (req, res) => {
     } else {
       user.findOne({fbId: req.user.id})
         .exec((err, data) => {
-          console.log(data);
+          //console.log(data);
           if(data === null) {
             res.json('MAIL');
           } else {
