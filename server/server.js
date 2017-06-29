@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const api = require('./api');
 const login = require('./login');
@@ -11,15 +12,12 @@ const passwordless = require('passwordless');
 const MongoStore = require('passwordless-mongostore');
 const email = require('emailjs');
 
-const FACEBOOK_APP_ID = 810183655805652;
-const FACEBOOK_APP_SECRET = '5b1dfd7777e8c6e2d21f37800d5bb3bb';
-
 let server = express();
 
 passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/login/facebook/callback"
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: `http://${process.env.HOST}/login/facebook/callback`
   },
   (accessToken, refreshToken, profile, cb) => {
     // User.findOrCreate(..., function(err, user) {
@@ -51,25 +49,25 @@ server.use(passport.initialize());
 server.use(passport.session());
 
 const smtpServer  = email.server.connect({
-   user:    'howardjuan0118@yahoo.com.tw',
-   password: 'xdjanzjvwpabvhvi',
+   user:    process.env.MAIL_USER,
+   password: process.env.MAIL_PWD,
    host:    'smtp.mail.yahoo.com',
    ssl:     true
 });
 
-const pathToMongoDb = 'mongodb://localhost/passwordless';
+const pathToMongoDb = process.env.MONGODBSTORE_URI || 'mongodb://localhost/passwordless';
 passwordless.init(new MongoStore(pathToMongoDb));
 
 passwordless.addDelivery(
     function(tokenToSend, uidToSend, recipient, callback) {
         recipient = `${recipient}@ntu.edu.tw`;
         console.log(recipient);
-        var host = 'localhost:3000';
+        var host = process.env.HOST;
         smtpServer.send({
             text:    'Hello!\nAccess your account here: http://' 
             + host + '?token=' + tokenToSend + '&uid=' 
             + encodeURIComponent(uidToSend), 
-            from:    'howardjuan0118@yahoo.com.tw', 
+            from:    process.env.MAIL_USER, 
             to:      recipient,
             subject: 'Token for ' + host
         }, function(err, message) { 
