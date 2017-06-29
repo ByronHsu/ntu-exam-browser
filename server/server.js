@@ -79,10 +79,10 @@ passwordless.addDelivery(
             callback(err);
         });
 });
-server.use(passwordless.sessionSupport());
+server.use(passwordless.sessionSupport()); 
 server.use(passwordless.acceptToken({ successRedirect: '/'}));
-
-server.use(express.static('build'));
+ 
+server.use(express.static(`${__dirname}/../build`));
 // server.get('/', (req, res) => {res.render('../build/index.html')});
 
 server.use('/api', api);
@@ -91,3 +91,4 @@ server.use('/mail', mailer);
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {console.log(`server is running on ${port}`)});
+ 

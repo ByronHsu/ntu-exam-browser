@@ -39,6 +39,7 @@ class Answer extends Component{
         let comment = {
             answerId:this.props.id,
             content:this.refs.text.value,
+            ownerId:this.props.user,
         }
         //console.log(comment);
         fetch(`/api/insert/comment`, {
@@ -56,6 +57,7 @@ class Answer extends Component{
                 answerId:this.props.id,
                 _id:res,
                 content:this.refs.text.value,
+                ownerId:this.props.user,
             }
             commentData.push(commentToPush);
             this.setState({commentData});
@@ -70,7 +72,7 @@ class Answer extends Component{
                 </a>
                 <div className="comment-body">
                     <div className="comment-heading">
-                        <h4 className="user">Gavino Free</h4>
+                        <h4 className="user">{this.props.ownerId}</h4>
                         <h5 className="time">5 minutes ago</h5>
                     </div>
                     <p>{ReactHtmlParser(this.props.content.replace(/\r?\n/g, '<br />'))}</p>
@@ -83,7 +85,7 @@ class Answer extends Component{
                                 </a>
                                 <div className="comment-body">
                                     <div className="comment-heading">
-                                        <h4 className="user">Ryan Haywood</h4>
+                                        <h4 className="user">{entry.ownerId}</h4>
                                         <h5 className="time">3 minutes ago</h5>
                                     </div>
                                     <p>{ReactHtmlParser(entry.content.replace(/\r?\n/g, '<br />'))}</p>
@@ -92,8 +94,8 @@ class Answer extends Component{
                         ))
                     }
                     </ul>
-                    <textarea ref='text' className="form-control" rows="3"></textarea>
-                    <button type="submit" className="btn btn-secondary" onClick={this.CommentOnClick}>Comment!</button>
+                    {this.props.user===null?null:<textarea ref='text' className="form-control" rows="3"></textarea>}
+                    {this.props.user===null?null:<button type="submit" className="btn btn-secondary" onClick={this.CommentOnClick}>Comment!</button>}
                 </div>
             </li>
         )
