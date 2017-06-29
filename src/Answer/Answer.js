@@ -86,7 +86,7 @@ class Answer extends Component{
                                         <h4 className="user">Ryan Haywood</h4>
                                         <h5 className="time">3 minutes ago</h5>
                                     </div>
-                                    <p>{entry.content}</p>
+                                    <p>{ReactHtmlParser(entry.content.replace(/\r?\n/g, '<br />'))}</p>
                                 </div>
                             </li> 
                         ))

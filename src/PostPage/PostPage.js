@@ -23,10 +23,22 @@ class PostPage extends Component{
             .then(response => response.json())
             .then((departments) => {
                 this.setState({ departmentOptions: departments });
+                this.setState({ department:departments[0].name });
+                return departments[0].name;
             })
             .catch((error) => {
                 console.log(error);
-            });
+            })
+            .then((res)=>{
+                fetch(`/api/get-data/department/name/${res}`)
+                    .then(response => response.json())
+                    .then((courses) => {
+                        this.setState({ courseOptions: courses });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            })
     }
     selectOnChange = (e) => {
         this.setState({department:e.target.value});

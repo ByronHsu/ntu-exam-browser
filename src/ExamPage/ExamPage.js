@@ -35,19 +35,21 @@ class ExamPage extends Component{
             array.push(i);
         return(
             <div className="container-fluid">
-                <nav aria-label="Page navigation example">
-                    <ul className="pagination">
-                    {
-                        array.map((entry,index) => (
-                            <li className="page-item"><a className="page-link" id={index+1} onClick={this.pageOnClick} >{index+1}</a></li>
-                        )) 
-                        //<li className="page-item"><a className="page-link" >i+1</a></li>
-                    }
-                    </ul>
-                </nav>
+                <div className="container">
+                    <nav aria-label="Page navigation example">
+                        <ul className="pagination">
+                        {
+                            array.map((entry,index) => (
+                                <li className="page-item"><a className="page-link" id={index+1} onClick={this.pageOnClick} >{index+1}</a></li>
+                            )) 
+                            //<li className="page-item"><a className="page-link" >i+1</a></li>
+                        }
+                        </ul>
+                    </nav>
+                </div>
                 <SinglePage examId={this.props.match.params.id} pageNumber={this.state.pageNumber}/>
             </div>
-        )
+        ) 
     }
 }
 
