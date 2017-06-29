@@ -233,7 +233,6 @@ router.get('/user', (req, res) => {
     } else {
       user.findOne({fbId: req.user.id})
         .exec((err, data) => {
-          //console.log(data);
           if(data === null) {
             res.json('MAIL');
           } else {
