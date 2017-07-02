@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Redirect
 } from 'react-router-dom';
-
+import './LoginPage.css'
 class Signup extends Component{
   constructor() {
     super();
@@ -29,16 +29,21 @@ class Signup extends Component{
   }
   render() {
     return (
-      <div className="Signup">
+      <div className="Signup container">
         {this.state.sending === true ? <Redirect to="/authentication" /> : null}
-        <input 
-          type="text"
-          value={this.state.studentId}
-          onChange={this.handleInputChange}
-          autoFocus
-        />
-        <a className="btn btn-secondary" onClick={this.handleSubmit} role="button">Submit</a>
-      </div>
+        <div className="loginRow row">
+          <div className="col-lg-3 col-md-4 col-sm-8">
+              <input 
+                type="text"
+                value={this.state.studentId}
+                onChange={this.handleInputChange}
+                placeholder="Type Your NTUid"
+                autoFocus
+              />
+              <button className="btn btn-success" onClick={this.handleSubmit}>Submit</button>
+          </div>
+        </div>
+      </div> 
     );
   }
 }

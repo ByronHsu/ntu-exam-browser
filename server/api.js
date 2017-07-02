@@ -16,32 +16,54 @@ var departmentSchema = new Schema({name: 'string', imgUrl: 'string'});
 var department = mongoose.model('department', departmentSchema);
 var courseSchema = new Schema({name: 'string', departmentId: 'string'});
 var course = mongoose.model('course', courseSchema);
-var examSchema = new Schema({name: 'string', courseId: 'string', numOfPages:'number',ownerId: 'string'});
+var examSchema = new Schema({name: 'string', courseId: 'string', numOfPages:'number',ownerId: 'string',time:'string'});
 var exam = mongoose.model('exam', examSchema);
-var pageSchema = new Schema({examId: 'string', pageNumber: 'number', content: 'string', imgUrl: 'string',ownerId: 'string'});
+var pageSchema = new Schema({examId: 'string', pageNumber: 'number', content: 'string', imgUrl: 'string',ownerId: 'string',time:'string'});
 var page = mongoose.model('page', pageSchema);
-var answerSchema = new Schema({pageId: 'string', content: 'string', ownerId: 'string', likeCnt: 'number'});
+var answerSchema = new Schema({pageId: 'string', content: 'string', ownerId: 'string', time:'string',likeCnt: 'number'});
 var answer = mongoose.model('answer', answerSchema);
-var commentSchema = new Schema({answerId: 'string', content: 'string', ownerId: 'string'});
+var commentSchema = new Schema({answerId: 'string', content: 'string', ownerId: 'string' , time:'string'});
 var comment = mongoose.model('comment', commentSchema);
 var userSchema = new Schema({studentId: 'string', fbId: 'string'});
 var user = mongoose.model('user', userSchema);
 
+getNowTime = () =>{
+  const time = new Date();
+  let t = [];
+  t[0] = time.getFullYear();
+  t[1] = time.getMonth() + 1;
+  t[2] = time.getDate();
+  t[3] = time.getHours();
+  t[4] = time.getMinutes();
+  t[5] = time.getSeconds();
+  for (let i = 3; i <= 5; i++) {
+    if (t[i] >= 0 && t[i] <= 9) {
+      t[i] = '0' + t[i];
+    }
+  }
+  return `${t[0]}/${t[1]}/${t[2]} ${t[3]}:${t[4]}:${t[5]}`;
+}
+
 router.post('/insert/comment',(req,res,next)=>{
   let temp = new comment(req.body);
+  temp.time=getNowTime();
+  //console.log(temp);
   temp.save((err) => {
     if(err) return handleError(err);
   });
-  res.send(temp._id);
+  res.send(temp);
 })
 
 router.post('/insert/Answer',(req,res,next)=>{
   let temp = new answer(req.body);
+  temp.time=getNowTime();
+  //console.log(temp);
   temp.save((err) => {
     if(err) return handleError(err);
   });
-  res.send(temp._id);
+  res.send(temp);
 })
+
 router.post('/insert/exam/:name', (req, res, next)=> {
   const examData = req.body;
   const name = req.params.name;
@@ -52,14 +74,14 @@ router.post('/insert/exam/:name', (req, res, next)=> {
       course.find({courseId: courseId})
         .exec((err, data) => {
           //console.log(data);
-          const examTemp = new exam({name: examData.examName, courseId: courseId, numOfPages:examData.text.length,ownerId:examData.ownerId});
+          const examTemp = new exam({name: examData.examName, courseId: courseId, numOfPages:examData.text.length,ownerId:examData.ownerId,time:getNowTime()});
           //console.log(examTemp);
           examTemp.save((err) => {
             if(err) return handleError(err);
           });
           //console.log(examData)
           for(let i=1;i<=examData.text.length;i++){
-            const pageTemp = new page({examId: examTemp._id, pageNumber: i, content: examData.text[i-1], imgUrl: examData.imgUrl[i-1],ownerId:examData.ownerId});
+            const pageTemp = new page({examId: examTemp._id, pageNumber: i, content: examData.text[i-1], imgUrl: examData.imgUrl[i-1],ownerId:examData.ownerId,time:getNowTime()});
             pageTemp.save((err) => {
               if(err) return handleError(err);
             });
@@ -101,6 +123,7 @@ router.get('/get-data/category', (req, res, next) => {
   department.find({})
     .exec((err, data) => {
       res.json(data);
+      console.log(data);
     });
 });
 
