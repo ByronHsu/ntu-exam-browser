@@ -53,12 +53,7 @@ class Answer extends Component{
         .then(res => res.json())
         .then((res)=>{
             let commentData=this.state.commentData;
-            const commentToPush={
-                answerId:this.props.id,
-                _id:res,
-                content:this.refs.text.value,
-                ownerId:this.props.user,
-            }
+            const commentToPush=res;
             commentData.push(commentToPush);
             this.setState({commentData});
             this.refs.text.value="";
@@ -73,7 +68,7 @@ class Answer extends Component{
                 <div className="comment-body">
                     <div className="comment-heading">
                         <h4 className="user">{this.props.ownerId}</h4>
-                        <h5 className="time">5 minutes ago</h5>
+                        <h5 className="time">{this.props.time}</h5>
                     </div>
                     <p>{ReactHtmlParser(this.props.content.replace(/\r?\n/g, '<br />'))}</p>
                     <ul className="comments-list">
@@ -86,7 +81,7 @@ class Answer extends Component{
                                 <div className="comment-body">
                                     <div className="comment-heading">
                                         <h4 className="user">{entry.ownerId}</h4>
-                                        <h5 className="time">3 minutes ago</h5>
+                                        <h5 className="time">{entry.time}</h5>
                                     </div>
                                     <p>{ReactHtmlParser(entry.content.replace(/\r?\n/g, '<br />'))}</p>
                                 </div>

@@ -16,6 +16,7 @@ class Category extends Component{
         };
     }
     componentWillMount() {
+        console.log('123');
         fetch('/api/get-data/category')
                 .then(response => response.json())
                 .then((departments) => {

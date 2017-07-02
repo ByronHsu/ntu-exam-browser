@@ -28,3 +28,6 @@ yarn-error.log*
 
 #eslint
 .eslintrc.js
+
+#add
+/server/add.js

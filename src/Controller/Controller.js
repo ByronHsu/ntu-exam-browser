@@ -60,8 +60,8 @@ class Controller extends Component{
                   <Link to="/category"><a className="nav-item nav-link">Category</a></Link>
                 </div> 
               </div>
-              {this.state.user === null ? <Link to="/loginpage"><a className="btn btn-secondary" href="#" role="button">Login</a></Link> :
-                                          <a className="btn btn-secondary" href="#" role="button">{this.state.user}</a> }
+              {this.state.user === null ? <Link to="/loginpage"><a className="btn btn-secondary" role="button">Login</a></Link> :
+                                          <a className="btn btn-secondary" role="button">{this.state.user}</a> }
             </nav>
           </div>
           {this.state.signup === true ? <Redirect to="/signup" /> : null}

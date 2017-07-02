@@ -80,17 +80,11 @@ class SinglePage extends Component{
         .then(res => res.json())
         .then((res)=>{
             let answerData=this.state.answerData;
-            const answerToPush={
-                pageId:this.state.pageData._id,
-                _id:res,
-                content:this.refs.text.value,
-                ownerId:this.props.user,
-            }
-            console.log(answerToPush);
+            const answerToPush = res;
             answerData.push(answerToPush);
             this.setState({answerData});
             this.refs.text.value="";
-        })
+        });
     }
     render(){ 
         //console.log(this.state.data);
@@ -107,7 +101,7 @@ class SinglePage extends Component{
                                     <a href="#"><b>{this.state.pageData.ownerId} </b></a>
                                     made a post.
                                 </div>
-                                <h6 className="text-muted time">1 minute ago</h6>
+                                <h6 className="text-muted time">{this.state.pageData.time}</h6>
                             </div>
                         </div> 
                         <div className="post-description"> 
@@ -127,7 +121,7 @@ class SinglePage extends Component{
                         <ul className="comments-list">
                         {
                             this.state.answerData.map((entry)=>(
-                                <Answer content={entry.content} id={entry._id} ownerId={entry.ownerId} user={this.props.user}/>
+                                <Answer content={entry.content} id={entry._id} ownerId={entry.ownerId} user={this.props.user} time={entry.time}/>
                             ))
                         }
                         </ul>
